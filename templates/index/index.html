@@ -1,0 +1,164 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+	<h1>
+		Projeto
+	</h1>
+
+	<div class="row">
+		<div class="col-sm-4">
+
+			<div class="card shadow my-4">
+				<div class="card-body">
+					<form id="form">
+						<div class="form-group">
+							<label for="data">Data</label>
+							<input id="data" name="data" class="form-control" type="date" value="{{ hoje }}" />
+						</div>
+
+						<button type="submit" class="btn btn-primary">Listar</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="card shadow my-4">
+		<div class="card-body" id="div-grafico"></div>
+	</div>
+
+</div>
+
+<script src="/static/js/jquery-validate/jquery.validate.min.js"></script>
+<script src="/static/js/jquery-validate/additional-methods.min.js"></script>
+<script src="/static/js/jquery-validate/localization/messages_pt_BR.min.js"></script>
+<script type="text/javascript" src="/static/js/chart.js/chart.min.js"></script>
+
+<script type="text/javascript">
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			data: {
+				required: true
+			}
+		},
+		submitHandler: function () {
+			atualizarDados();
+		}
+	});
+
+	async function atualizarDados() {
+		waitSwal();
+
+		try {
+
+			let response = await fetch("/obterDados");
+
+			if (response.ok) {
+
+				Swal.close();
+
+				let div = document.getElementById("div-grafico");
+				div.innerHTML = '<canvas id="grafico-barras" style="height: 50vh;"></canvas>';
+
+				let labels = [], data = [];
+
+				let dados = await response.json();
+				if (!dados || !dados.length) {
+					Swal.fire("Erro", "Sem dados na data especificada!", "error");
+					return;
+				}
+
+				for (let i = 0; i < dados.length; i++) {
+					labels.push(dados[i].dia);
+					data.push(dados[i].valor);
+				}
+
+				let grafico = new Chart(document.getElementById("grafico-barras"), {
+					type: "bar",
+					data: {
+						labels: labels,
+						datasets: [{
+							label: "Valor",
+							backgroundColor: "#4e73df",
+							hoverBackgroundColor: "#2e59d9",
+							borderColor: "#4e73df",
+							data: data,
+						}],
+					},
+					options: {
+						maintainAspectRatio: false,
+						layout: {
+							padding: {
+								left: 10,
+								right: 25,
+								top: 25,
+								bottom: 0
+							}
+						},
+						scales: {
+							x: {
+								gridLines: {
+									display: false,
+									drawBorder: false
+								},
+								ticks: {
+									maxTicksLimit: 10
+								},
+								maxBarThickness: 25,
+							},
+							y: {
+								//display: false,
+								ticks: {
+									min: 0,
+									max: 10,
+									maxTicksLimit: 10,
+									padding: 10
+								},
+								gridLines: {
+									color: "rgb(234, 236, 244)",
+									zeroLineColor: "rgb(234, 236, 244)",
+									drawBorder: false,
+									borderDash: [2],
+									zeroLineBorderDash: [2]
+								}
+							},
+						},
+						legend: {
+							display: false
+						},
+						tooltips: {
+							titleMarginBottom: 10,
+							titleFontColor: '#6e707e',
+							titleFontSize: 14,
+							backgroundColor: "rgb(255,255,255)",
+							bodyFontColor: "#858796",
+							borderColor: '#dddfeb',
+							borderWidth: 1,
+							xPadding: 15,
+							yPadding: 15,
+							displayColors: false,
+							caretPadding: 10
+						},
+					}
+				});
+
+			} else {
+				await exibirErro(response);
+			}
+
+		} catch (ex) {
+			Swal.fire("Erro", "Erro ao listar os dados: " + ex.message, "error");
+		}
+	}
+
+	atualizarDados();
+
+</script>
+
+{% endblock %}

@@ -26,7 +26,7 @@ USE maternidade;
 -- topic espm/stainel/mtp/DewPoint
 -- {"DewPoint": 15.39,"clientId":"mtp"}
 CREATE TABLE creative (
-  id bigint NOT NULL AUTO_INCREMENT,
+  id bigint NOT NULL,
   data datetime NOT NULL,
   id_sensor tinyint NOT NULL,
   delta int NOT NULL,
