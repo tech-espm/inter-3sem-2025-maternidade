@@ -7,6 +7,10 @@ html, body {
 	min-height: 100vh;
 }
 
+body {
+	font-family: Montserrat, sans-serif;
+}
+
 .limitador {
 	max-width: 1200px;
 	margin: 0px auto;
@@ -32,4 +36,115 @@ html, body {
 .link-rodape, .link-rodape:hover {
 	color: white;
 	text-decoration: none;
+}
+
+.bg-light {
+	background-color: #d9c1c7;
+}
+
+.hero {
+    position: relative;
+    background: url('/static/img/pe.jpg') center/cover no-repeat;
+    background-blend-mode: overlay;
+    background-color: rgba(160, 86, 199, 0.6); /* camada roxa por cima */
+    padding: 150px 10px;
+    text-align: center;
+    color: white;
+   
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    z-index: 1;
+    position: relative;
+}
+
+/* Sobre Nós */
+.sobre-nos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 60px 40px;
+    gap: 40px;
+    background-color: #fff;
+}
+
+.sobre-nos .texto {
+    flex: 1;
+    min-width: 280px;
+}
+
+.sobre-nos .imagem {
+    flex: 1;
+    min-width: 280px;
+    text-align: center;
+}
+
+.sobre-nos img {
+    width: 90%;
+    border-radius: 10px;
+}
+
+.sobre-nos .tag {
+    color: #b88ac0;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.sobre-nos h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.sobre-nos p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Sobre o Projeto */
+.sobre-projeto {
+    background-color: #e7d8f4;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.sobre-projeto h3 {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.projeto-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.card-sobre {
+    background-color: white;
+    padding: 20px;
+    width: 280px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.card-sobre img {
+    width: 60px;
+    margin-bottom: 15px;
+}
+
+.card-sobre p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.destaque {
+    background-color: #d5a5ff;
+    color: white;
 }

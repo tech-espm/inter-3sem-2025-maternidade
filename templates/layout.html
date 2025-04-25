@@ -7,14 +7,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	{% if titulo %}
-	<title>{{ titulo }} - Projeto</title>
+	<title>{{ titulo }} - Monitoramento</title>
 	{% else %}
-	<title>Projeto</title>
+	<title>Monitoramento</title>
 	{% endif %}
 
 	<!--
 		https://getbootstrap.com/docs/4.6/getting-started/introduction/
 	-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
 
 	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="/static/css/sweetalert2.min.css" />
@@ -38,9 +41,9 @@
 			https://getbootstrap.com/docs/4.6/components/navbar/
 		-->
 
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="/">
-				Projeto
+				Monitoramento
 			</a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Alternar navegação">

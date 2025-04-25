@@ -65,71 +65,91 @@
 
 				Swal.close();
 
+				let div = document.getElementById("div-grafico");
+				div.innerHTML = '<canvas id="grafico-barras" style="height: 50vh;"></canvas>';
+
+				let labels = [], data = [];
+
 				let dados = await response.json();
 				if (!dados || !dados.length) {
 					Swal.fire("Erro", "Sem dados na data especificada!", "error");
 					return;
 				}
 
-				let menorRuido = Infinity;
-				let maiorRuido = -Infinity;
 				for (let i = 0; i < dados.length; i++) {
-					if (menorRuido > dados[i].ruido)
-						menorRuido = dados[i].ruido;
-					if (maiorRuido < dados[i].ruido)
-						maiorRuido = dados[i].ruido;
+					labels.push(dados[i].dia);
+					data.push(dados[i].valor);
 				}
 
-				let delta = maiorRuido - menorRuido;
-				for (let i = 0; i < dados.length; i++) {
-					dados[i].ruido = 100 * (dados[i].ruido - menorRuido) / delta;
-				}
-
-				let dias = [];
-				let ultimoDia = null;
-				for (let i = 0; i < dados.length; i++) {
-					if (ultimoDia !== dados[i].dia) {
-						ultimoDia = dados[i].dia;
-						dias.push(ultimoDia);
-					}
-				}
-
-				let html = [
-					`
-					<table>
-						<thead>
-							<tr>
-								<th></th>
-					`
-				];
-
-				for (let d = 0; d < dias.length; d++) {
-					html.push(`<th>${dias[d]}</th>`);
-				}
-
-				html.push(`
-					</tr>
-					</thead>
-					<tbody>
-				`);
-
-				for (let h = 0; h <= 23; h++) {
-					html.push(`<tr><td>${h}:00</td>`);
-					for (let d = 0; d < dias.length; d++) {
-						let ruido = 0;
-						for (let i = 0; i < dados.length; i++) {
-							if (dados[i].dia === dias[d] && dados[i].hora === h) {
-								ruido = dados[i].ruido;
-								break;
+				let grafico = new Chart(document.getElementById("grafico-barras"), {
+					type: "bar",
+					data: {
+						labels: labels,
+						datasets: [{
+							label: "Valor",
+							backgroundColor: "#4e73df",
+							hoverBackgroundColor: "#2e59d9",
+							borderColor: "#4e73df",
+							data: data,
+						}],
+					},
+					options: {
+						maintainAspectRatio: false,
+						layout: {
+							padding: {
+								left: 10,
+								right: 25,
+								top: 25,
+								bottom: 0
 							}
-						}
-						html.push(`<td style="background-color:rgba(113, 74, 152, ${ruido / 100});">${ruido.toFixed(1)}</td>`);
+						},
+						scales: {
+							x: {
+								gridLines: {
+									display: false,
+									drawBorder: false
+								},
+								ticks: {
+									maxTicksLimit: 10
+								},
+								maxBarThickness: 25,
+							},
+							y: {
+								//display: false,
+								ticks: {
+									min: 0,
+									max: 10,
+									maxTicksLimit: 10,
+									padding: 10
+								},
+								gridLines: {
+									color: "rgb(234, 236, 244)",
+									zeroLineColor: "rgb(234, 236, 244)",
+									drawBorder: false,
+									borderDash: [2],
+									zeroLineBorderDash: [2]
+								}
+							},
+						},
+						legend: {
+							display: false
+						},
+						tooltips: {
+							titleMarginBottom: 10,
+							titleFontColor: '#6e707e',
+							titleFontSize: 14,
+							backgroundColor: "rgb(255,255,255)",
+							bodyFontColor: "#858796",
+							borderColor: '#dddfeb',
+							borderWidth: 1,
+							xPadding: 15,
+							yPadding: 15,
+							displayColors: false,
+							caretPadding: 10
+						},
 					}
-					html.push(`</tr>`);
-				}
-				html.push(`</tbody></table>`);
+				});
 
-				document.getElementById("div-grafico").innerHTML = html.join('');
 			} else {
 				await exibirErro(response);
 			}

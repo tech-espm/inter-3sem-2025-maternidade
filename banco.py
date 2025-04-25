@@ -80,3 +80,37 @@ def criarPessoa(nome, email):
 
 # Para mais informações:
 # https://docs.sqlalchemy.org/en/14/tutorial/dbapi_transactions.html
+
+def obterIdMaximo(tabela):
+	with Session(engine) as sessao:
+		registro = sessao.execute(text(f"SELECT MAX(id) id FROM {tabela}")).first()
+
+		if registro == None or registro.id == None:
+			return 0
+		else:
+			return registro.id
+
+def inserirDados(registros):
+	with Session(engine) as sessao, sessao.begin():
+		for registro in registros:
+			sessao.execute(text("INSERT INTO creative (id, data, id_sensor, delta, luminosidade, umidade, temperatura, voc, co2, pressao_ar, ruido, aerosol_parado, aerosol_risco, ponto_orvalho) VALUES (:id, :data, :id_sensor, :delta, :luminosidade, :umidade, :temperatura, :voc, :co2, :pressao_ar, :ruido, :aerosol_parado, :aerosol_risco, :ponto_orvalho)"), registro)
+
+def listarDados(dataInicial, dataFinal):
+	parametros = {
+		"dataInicial": dataInicial + " 00:00:00",
+		"dataFinal": dataFinal + " 23:59:59"
+	}
+
+	with Session(engine) as sessao:
+		registros = sessao.execute(text("select date_format(date(data), '%d/%m/%Y') dia, extract(hour from data) hora, max(ruido) ruido, avg(luminosidade) luminosidade, avg(umidade) umidade, avg(temperatura) temperatura from creative where data between :dataInicial and :dataFinal group by dia, hora"), parametros)
+		dados = []
+		for registro in registros:
+			dados.append({
+				"dia": registro.dia,
+				"hora": registro.hora,
+				"ruido": registro.ruido,
+				"luminosidade": registro.luminosidade,
+				"umidade": registro.umidade,
+				"temperatura": registro.temperatura,
+			})
+		return dados

@@ -1,17 +1,41 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+{% endblock %}
+
 {% block body %}
 
-<div class="container-fluid">
+<section class="hero">
+	<h1>Sobre nós</h1>
+</section>
 
-	<h1>
-		Sobre
-	</h1>
+<section class="sobre-nos">
+	<div class="texto">
+		<span class="tag">Estudantes de Ciência de Dados</span>
+		<h2>Somos uma equipe comprometida em transformar o ambiente hospitalar</h2>
+		<p>Por meio de soluções tecnológicas que promovem organização, eficiência e bem-estar, nossa equipe é dedicada à qualidade neonatal, atuando em necessidades reais de crianças e bebês em unidades hospitalares e domiciliares. Trabalhamos com dados de sensores coletados em tempo real de som, integrando conhecimentos de dados, estatística e empatia para oferecer soluções eficazes e humanizadas.</p>
+	</div>
+	<div class="imagem">
+		<img src="/static/img/nos.jpg" alt="Foto da equipe">
+	</div>
+</section>
 
-	<p>
-		Sobre nós! 😊
-	</p>
-
-</div>
+<section class="sobre-projeto">
+	<h3>Sobre o Projeto</h3>
+	<div class="projeto-cards">
+		<div class="card card-sobre">
+			<img src="sensor-icon.png" alt="Sensor">
+			<p>Colabora com a redução de internações por meio de tecnologia de detecção sonora em UTIs. Esse sistema permite um monitoramento em tempo real e atua como ferramenta de suporte às equipes de saúde neonatal e à tomada de decisões com maior assertividade imediata.</p>
+		</div>
+		<div class="card card-sobre destaque">
+			<img src="porquinho.png" alt="Economia">
+			<p>O sistema científico baseado na inteligência de dados evita desperdício de recursos hospitalares ao monitorar o choro dos bebês e criar insights únicos sobre seu bem-estar, contribuindo para o alívio da sobrecarga dos profissionais e o atendimento ágil.</p>
+		</div>
+		<div class="card card-sobre">
+			<img src="monitor.png" alt="Computador">
+			<p>A solução também conta com interface intuitiva e acessível para gestão das informações dos sensores, promovendo uma resposta rápida às necessidades dos bebês.</p>
+		</div>
+	</div>
+</section>
 
 {% endblock %}
