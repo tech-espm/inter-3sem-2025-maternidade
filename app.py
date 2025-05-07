@@ -6,14 +6,39 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+#rotas flask
+
 @app.get('/')
 def index():
     hoje = datetime.today().strftime('%Y-%m-%d')
     return render_template('index/index.html', hoje=hoje)
 
+@app.get('/index-antiga')
+def index_antiga():
+    hoje = datetime.today().strftime('%Y-%m-%d')
+    return render_template('index/index-antiga.html', hoje=hoje)
+
+
 @app.get('/sobre')
 def sobre():
     return render_template('index/sobre.html', titulo='Sobre Nós')
+
+@app.get('/temperatura')
+def temperatura():
+    hoje = datetime.today().strftime('%Y-%m-%d')
+    return render_template('temperatura.html', hoje=hoje)
+
+@app.get('/luminosidade')
+def luminosidade():
+    hoje = datetime.today().strftime('%Y-%m-%d')
+    return render_template('luminosidade.html', hoje=hoje)
+    
+@app.get('/umidade')
+def umidade():
+    hoje = datetime.today().strftime('%Y-%m-%d')
+    return render_template('umidade.html', hoje=hoje)
+
+
 
 @app.get('/obterDados')
 def obterDados():

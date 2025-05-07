@@ -1,0 +1,223 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<section class="hero">
+	<h1>Monitoramento de Temperatura </h1>
+</section>
+
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="card shadow my-4">
+				<div class="card-body">
+					<form id="form">
+						<div class="form-group">
+							<label for="data">Data</label>
+							<input id="data" name="data" class="form-control" type="date" value="{{ hoje }}" />
+						</div>
+						<button type="submit" class="btn btn-primary">Listar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Tabela de Calor -->
+	<div class="card shadow my-4">
+		<div class="card-body" id="div-grafico"></div>
+	</div>
+
+	<!-- Gráfico Comparativo -->
+	<div class="card shadow my-4">
+		<div class="card-body">
+			<canvas id="graficoComparativo" height="120"></canvas>
+		</div>
+	</div>
+
+</div>
+
+<!-- Scripts -->
+<script src="/static/js/jquery-validate/jquery.validate.min.js"></script>
+<script src="/static/js/jquery-validate/additional-methods.min.js"></script>
+<script src="/static/js/jquery-validate/localization/messages_pt_BR.min.js"></script>
+<script type="text/javascript" src="/static/js/chart.js/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript">
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			data: {
+				required: true
+			}
+		},
+		submitHandler: function () {
+			atualizarDados();
+		}
+	});
+
+	async function atualizarDados() {
+		Swal.fire({
+			title: 'Carregando...',
+			allowOutsideClick: false,
+			didOpen: () => Swal.showLoading()
+		});
+
+		try {
+			let dataFinal = document.getElementById("data").value;
+			let dataInicial = (new Date((new Date(dataFinal)).getTime() - (6 * 24 * 60 * 60 * 1000))).toISOString().substring(0, 10);
+			let response = await fetch("/obterDados?dataInicial=" + encodeURIComponent(dataInicial) + "&dataFinal=" + encodeURIComponent(dataFinal));
+
+			if (response.ok) {
+				Swal.close();
+				let dados = await response.json();
+
+				if (!dados || !dados.length) {
+					Swal.fire("Erro", "Sem dados na data especificada!", "error");
+					return;
+				}
+
+				let menorRuido = Infinity;
+				let maiorRuido = -Infinity;
+				for (let i = 0; i < dados.length; i++) {
+					if (menorRuido > dados[i].ruido) menorRuido = dados[i].ruido;
+					if (maiorRuido < dados[i].ruido) maiorRuido = dados[i].ruido;
+				}
+
+				let delta = maiorRuido - menorRuido || 1; // evita divisão por zero
+				for (let i = 0; i < dados.length; i++) {
+					dados[i].ruido_normalizado = 100 * (dados[i].ruido - menorRuido) / delta;
+				}
+
+				let dias = [];
+				let ultimoDia = null;
+				for (let i = 0; i < dados.length; i++) {
+					if (ultimoDia !== dados[i].dia) {
+						ultimoDia = dados[i].dia;
+						dias.push(ultimoDia);
+					}
+				}
+
+				let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
+				for (let d = 0; d < dias.length; d++) {
+					html.push(`<th>${dias[d]}</th>`);
+				}
+				html.push(`</tr></thead><tbody>`);
+
+				for (let h = 0; h <= 23; h++) {
+					html.push(`<tr><td>${h}:00</td>`);
+					for (let d = 0; d < dias.length; d++) {
+						let ruido = 0;
+						for (let i = 0; i < dados.length; i++) {
+							if (dados[i].dia === dias[d] && dados[i].hora === h) {
+								ruido = dados[i].ruido_normalizado;
+								break;
+							}
+						}
+						html.push(`<td style="background-color:rgba(113, 74, 152, ${ruido / 100});">${ruido.toFixed(1)}</td>`);
+					}
+					html.push(`</tr>`);
+				}
+				html.push(`</tbody></table>`);
+				document.getElementById("div-grafico").innerHTML = html.join('');
+
+				/*
+				// GRÁFICO COMPARATIVO COM CHART.JS
+				let horas = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+				let datasets = [];
+
+				for (let d = 0; d < dias.length; d++) {
+					let dadosDia = dados.filter(e => e.dia === dias[d]);
+					let ruidoPorHora = [];
+					let tempPorHora = [];
+
+					for (let h = 0; h <= 23; h++) {
+						let dadoHora = dadosDia.find(e => e.hora === h);
+						ruidoPorHora.push(dadoHora ? dadoHora.ruido : null);
+						tempPorHora.push(dadoHora ? dadoHora.temperatura : null);
+					}
+
+					datasets.push({
+						label: `Ruído - ${dias[d]}`,
+						data: ruidoPorHora,
+						borderColor: 'rgba(113, 74, 152, 1)',
+						backgroundColor: 'rgba(113, 74, 152, 0.2)',
+						tension: 0.3,
+						yAxisID: 'y',
+					});
+					datasets.push({
+						label: `Temperatura - ${dias[d]}`,
+						data: tempPorHora,
+						borderColor: 'rgba(255, 87, 34, 1)',
+						backgroundColor: 'rgba(255, 87, 34, 0.2)',
+						borderDash: [5, 5],
+						tension: 0.3,
+						yAxisID: 'y1',
+					});
+				}
+				
+				if (window.graficoInstancia) {
+					window.graficoInstancia.destroy();
+				}
+
+				const ctx = document.getElementById('graficoComparativo').getContext('2d');
+				window.graficoInstancia = new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: horas,
+						datasets: datasets
+					},
+					options: {
+						responsive: true,
+						interaction: {
+							mode: 'index',
+							intersect: false,
+						},
+						scales: {
+							y: {
+								type: 'linear',
+								position: 'left',
+								title: {
+									display: true,
+									text: 'Ruído (dB)'
+								}
+							},
+							y1: {
+								type: 'linear',
+								position: 'right',
+								grid: {
+									drawOnChartArea: false
+								},
+								title: {
+									display: true,
+									text: 'Temperatura (°C)'
+								}
+							}
+						},
+						plugins: {
+							title: {
+								display: true,
+								text: 'Comparativo de Ruído e Temperatura por Hora'
+							}
+						}
+					}
+				});
+				*/
+			} else {
+				const erro = await response.text();
+				Swal.fire("Erro", erro, "error");
+			}
+
+		} catch (ex) {
+			Swal.fire("Erro", "Erro ao listar os dados: " + ex.message, "error");
+		}
+	}
+
+	atualizarDados();
+
+</script>
+
+{% endblock %}

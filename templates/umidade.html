@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<section class="hero">
+	<h1>Monitoramento de Umidade</h1>
+</section>
+
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-sm-4">
+
+			<div class="card shadow my-4">
+				<div class="card-body">
+					<form id="form">
+						<div class="form-group">
+							<label for="data">Data</label>
+							<input id="data" name="data" class="form-control" type="date" value="{{ hoje }}" />
+						</div>
+
+						<button type="submit" class="btn btn-primary">Listar</button>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="card shadow my-4">
+		<div class="card-body" id="div-grafico"></div>
+	</div>
+
+</div>
+
+<!-- Scripts -->
+<script src="/static/js/jquery-validate/jquery.validate.min.js"></script>
+<script src="/static/js/jquery-validate/additional-methods.min.js"></script>
+<script src="/static/js/jquery-validate/localization/messages_pt_BR.min.js"></script>
+<script type="text/javascript" src="/static/js/chart.js/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript">
+	"use strict";
+
+</script>
+
+{% endblock %}

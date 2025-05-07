@@ -3,7 +3,6 @@ img {
 }
 
 html, body {
-	/* Para fazer o rodapé ficar sempre na parte inferior da página ;) */
 	min-height: 100vh;
 }
 
@@ -23,7 +22,6 @@ body {
 }
 
 .conteudo {
-	/* Para fazer o rodapé ficar sempre na parte inferior da página ;) */
 	flex: 1 1 auto;
 }
 
@@ -60,7 +58,7 @@ body {
     position: relative;
 }
 
-/* Sobre Nós */
+
 .sobre-nos {
     display: flex;
     flex-wrap: wrap;
@@ -105,7 +103,7 @@ body {
     line-height: 1.6;
 }
 
-/* Sobre o Projeto */
+
 .sobre-projeto {
     background-color: #e7d8f4;
     padding: 60px 20px;
@@ -147,4 +145,13 @@ body {
 .destaque {
     background-color: #d5a5ff;
     color: white;
+}
+
+
+.navbar img {
+	height: 40px;
+}
+.navbar .nav-link {
+	margin-left: 10px;
+
 }
