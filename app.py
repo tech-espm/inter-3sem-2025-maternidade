@@ -39,7 +39,6 @@ def umidade():
     return render_template('umidade.html', hoje=hoje)
 
 
-
 @app.get('/obterDados')
 def obterDados():
     # Obter o maior id do banco

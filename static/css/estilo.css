@@ -4,6 +4,7 @@ img {
 
 html, body {
 	min-height: 100vh;
+    background-color: #fbf4fb;
 }
 
 body {
@@ -48,7 +49,7 @@ body {
     padding: 150px 10px;
     text-align: center;
     color: white;
-   
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero h1 {
@@ -154,4 +155,96 @@ body {
 .navbar .nav-link {
 	margin-left: 10px;
 
+}
+
+
+
+.btn-primary {
+    text-decoration-color: #070707;
+    background-color: #d7b1de;
+    border-color:#ad5bbc
+    
+    
+}
+
+.btn-primary:hover, 
+.btn-primary:focus {
+    background-color: #821c73; 
+    border-color: #070707;
+}
+
+.textotitulo{
+    font-family:  Montserrat, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #571288;
+    text-align: center;
+    margin: 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #da50e7;
+    text-shadow: 2px 5px 8px rgba(0, 0, 0, 0.3);
+  
+    
+}
+
+
+.social-links a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.social-links a:hover {
+    color: rgb(16, 99, 172);
+    transform: scale(1.1);
+}
+
+.social-links img {
+    transition: transform 0.2s;
+}
+
+.social-links img:hover {
+    transform: rotate(10deg);
+}
+
+
+.social-links-container {
+    display: flex;
+    gap: 70px;
+    margin-top: 70px;
+}
+
+.social-block {
+    width: 200px;
+    background-color: #d5a5ff;
+    border-radius:27px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.social-block:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(139, 144, 144, 0.3);
+}
+
+.social-block a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 20px;
+    display: block;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+.social-block img {
+    transition: transform 0.2s ease;
+}
+
+.social-block img:hover {
+    transform: rotate(15deg);
 }
