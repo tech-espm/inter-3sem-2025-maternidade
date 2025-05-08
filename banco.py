@@ -176,3 +176,34 @@ def listarUmidadeAgrupada(dataInicial, dataFinal):
 			})
 
 		return dados
+	
+
+def listarLuminosidadeAgrupada(dataInicial, dataFinal):
+	parametros = {
+		"dataInicial": dataInicial + " 00:00:00",
+		"dataFinal": dataFinal + " 23:59:59"
+	}
+
+	with Session(engine) as sessao:
+		registros = sessao.execute(text("""
+			SELECT 
+				DATE_FORMAT(data, '%W') AS dia,
+				EXTRACT(HOUR FROM data) AS hora,
+				ROUND(AVG(luminosidade), 2) AS lminosidade
+			FROM creative
+			WHERE data BETWEEN :dataInicial AND :dataFinal
+			GROUP BY dia, hora
+			ORDER BY 
+				FIELD(dia, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'), 
+				hora
+		"""), parametros)
+
+		dados = []
+		for registro in registros:
+			dados.append({
+				"dia": registro.dia,
+				"hora": registro.hora,
+				"umidade": registro.umidade,
+			})
+
+		return dados
