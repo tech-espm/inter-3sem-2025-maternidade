@@ -31,19 +31,19 @@
 		<h2 class="textotitulo">Dados Disponíveis</h2>
 		<div class="social-links-container d-flex flex-wrap justify-content-center">
 			<div class="social-block text-center mx-3">
-				<a href="" >
+				<a href="http://localhost:3000/luminosidade" >
 					<img src="/static/img/luminosidade.png" alt="Luminosidade" width="50" class="mb-2">
 					<p>Luminosidade</p>
 				</a>
 			</div>
 			<div class="social-block text-center mx-3">
-				<a href="" >
+				<a href="http://localhost:3000/temperatura" >
 					<img src="/static/img/temperatura.png" alt="Temperatura" width="50" class="mb-2">
 					<p>Temperatura</p>
 				</a>
 			</div>
 			<div class="social-block text-center mx-3">
-				<a href="">
+				<a href="http://localhost:3000/umidade">
 					<img src="/static/img/umidade.png" alt="Umidade" width="50" class="mb-2">
 					<p>Umidade</p>
 				</a>
@@ -61,6 +61,7 @@
 <script src="/static/js/jquery-validate/additional-methods.min.js"></script>
 <script src="/static/js/jquery-validate/localization/messages_pt_BR.min.js"></script>
 <script type="text/javascript" src="/static/js/chart.js/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script type="text/javascript">
 	"use strict";
@@ -123,11 +124,10 @@
 				}
 
 				//TABELA
-				let html = [`<table class="table table-bordered table-sm w-50 mx-auto" style="height: auto; line-height: 1.2;"><thead><tr><th>Hora</th>`];
+				let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
 				for (let d = 0; d < dias.length; d++) {
 					html.push(`<th>${dias[d]}</th>`);
 				}
-
 				html.push(`
 					</tr>
 					</thead>
