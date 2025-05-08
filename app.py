@@ -57,6 +57,9 @@ def obterDados():
 
     return json.jsonify(dados)
 
+
+
+
 @app.post('/criar')
 def criar():
     dados = request.json
@@ -66,3 +69,16 @@ def criar():
 
 if __name__ == '__main__':
     app.run(host=config.host, port=config.port)
+
+
+@app.get('/obterTemperaturaAgrupada')
+def obterTemperaturaAgrupada():
+	dataInicial = request.args.get("dataInicial")
+	dataFinal = request.args.get("dataFinal")
+
+	if not dataInicial or not dataFinal:
+		return json.jsonify({"erro": "Parâmetros inválidos"}), 400
+
+	dados = banco.listarTemperaturaAgrupada(dataInicial, dataFinal)
+	return json.jsonify(dados)
+

@@ -114,3 +114,34 @@ def listarDados(dataInicial, dataFinal):
 				"temperatura": registro.temperatura,
 			})
 		return dados
+
+
+def listarTemperaturaAgrupada(dataInicial, dataFinal):
+	parametros = {
+		"dataInicial": dataInicial + " 00:00:00",
+		"dataFinal": dataFinal + " 23:59:59"
+	}
+
+	with Session(engine) as sessao:
+		registros = sessao.execute(text("""
+			SELECT 
+				DATE_FORMAT(data, '%W') AS dia,
+				EXTRACT(HOUR FROM data) AS hora,
+				ROUND(AVG(temperatura), 2) AS temperatura
+			FROM creative
+			WHERE data BETWEEN :dataInicial AND :dataFinal
+			GROUP BY dia, hora
+			ORDER BY 
+				FIELD(dia, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'), 
+				hora
+		"""), parametros)
+
+		dados = []
+		for registro in registros:
+			dados.append({
+				"dia": registro.dia,
+				"hora": registro.hora,
+				"temperatura": registro.temperatura,
+			})
+
+		return dados

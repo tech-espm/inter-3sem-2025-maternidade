@@ -107,17 +107,14 @@
 					return;
 				}
 
-				let menorRuido = Infinity;
-				let maiorRuido = -Infinity;
+				let menorTemperatura = Infinity;
+				let maiorTemperatura = -Infinity;
 				for (let i = 0; i < dados.length; i++) {
-					if (menorRuido > dados[i].ruido) menorRuido = dados[i].ruido;
-					if (maiorRuido < dados[i].ruido) maiorRuido = dados[i].ruido;
+					if (menorTemperatura > dados[i].temperatura) menorTemperatura = dados[i].temperatura;
+					if (maiorTemperatura < dados[i].temperatura) maiorTemperatura = dados[i].temperatura;
 				}
 
-				let delta = maiorRuido - menorRuido || 1; // evita divisão por zero
-				for (let i = 0; i < dados.length; i++) {
-					dados[i].ruido_normalizado = 100 * (dados[i].ruido - menorRuido) / delta;
-				}
+			
 
 				let dias = [];
 				let ultimoDia = null;
@@ -127,7 +124,8 @@
 						dias.push(ultimoDia);
 					}
 				}
-
+				
+				//formatação da tabela
 				let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
 				for (let d = 0; d < dias.length; d++) {
 					html.push(`<th>${dias[d]}</th>`);
@@ -141,14 +139,15 @@
 				for (let h = 0; h <= 23; h++) {
 					html.push(`<tr><td>${h}:00</td>`);
 					for (let d = 0; d < dias.length; d++) {
-						let ruido = 0;
+						let temperatura = 0;
 						for (let i = 0; i < dados.length; i++) {
 							if (dados[i].dia === dias[d] && dados[i].hora === h) {
-								ruido = dados[i].ruido_normalizado;
+								temperatura = dados[i].temperatura;
 								break;
 							}
 						}
-						html.push(`<td style="background-color:rgba(113, 74, 152, ${ruido / 100});">${ruido.toFixed(1)}</td>`);
+						const opacity = (temperatura - 20) / 3;
+						html.push(`<td style="background-color:rgba(113, 74, 152, ${opacity});">${temperatura.toFixed(1)}</td>`);
 					}
 					html.push(`</tr>`);
 				}
