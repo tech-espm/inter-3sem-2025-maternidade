@@ -82,3 +82,13 @@ def obterTemperaturaAgrupada():
 	dados = banco.listarTemperaturaAgrupada(dataInicial, dataFinal)
 	return json.jsonify(dados)
 
+@app.get('/obterUmidadeAgrupada')
+def obterUmidadeAgrupada():
+    dataInicial = request.args.get("dataInicial")
+    dataFinal = request.args.get("dataFinal")
+    
+    if not dataInicial or not dataFinal:
+        return json.jsonify({"erro": "Parâmetros inválidos"}), 400
+
+    dados = banco.listarUmidadeAgrupada(dataInicial, dataFinal)  
+    return json.jsonify(dados)

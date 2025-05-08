@@ -128,18 +128,24 @@
 				for (let h = 0; h <= 23; h++) {
 					html.push(`<tr><td>${h}:00</td>`);
 					for (let d = 0; d < dias.length; d++) {
-						let ruido = 0;
+						let umidade = null;
 						for (let i = 0; i < dados.length; i++) {
 							if (dados[i].dia === dias[d] && dados[i].hora === h) {
-								ruido = dados[i].ruido;
+								umidade = dados[i].umidade;
 								break;
 							}
 						}
-						const opacity = (umidade - 75) / 13;//normalização da umidade
-						html.push(`<td style="background-color:rgba(113, 74, 152, ${opacity});">${umidade.toFixed(1)}</td>`);
+
+						if (umidade !== null) {
+							const opacity = Math.min(Math.max((umidade - 75) / 13, 0), 1); // entre 0 e 1
+							html.push(`<td style="background-color:rgba(113, 74, 152, ${opacity});">${umidade.toFixed(1)}</td>`);
+						} else {
+							html.push("<td>-</td>");
+						}
 					}
 					html.push(`</tr>`);
 				}
+
 				html.push(`</tbody></table>`);
 				document.getElementById("div-grafico").innerHTML = html.join('');
 
@@ -156,14 +162,6 @@
 	atualizarDados();
 
 </script>
-
-
-
-
-
-
-
-
 
 
 {% endblock %}
