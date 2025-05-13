@@ -4,6 +4,7 @@
 
 <section class="hero">
 	<h1>Monitoramento de Temperatura </h1>
+	<button type="submit" class="graficosbotão">Visualizar Gráficos</button>
 </section>
 
 <div class="container-fluid">
@@ -54,8 +55,6 @@
 		<div class="card-body" id="div-grafico"></div>
 	</div>
 
-	
-
 </div>
 
 
@@ -103,11 +102,17 @@
 				let menorTemperatura = Infinity;
 				let maiorTemperatura = -Infinity;
 				for (let i = 0; i < dados.length; i++) {
+					// Para que o 0.0 não atrapalhe
+					if (!dados[i].temperatura) continue;
 					if (menorTemperatura > dados[i].temperatura) menorTemperatura = dados[i].temperatura;
 					if (maiorTemperatura < dados[i].temperatura) maiorTemperatura = dados[i].temperatura;
 				}
 
-			
+				let delta = maiorTemperatura - menorTemperatura;
+				for (let i = 0; i < dados.length; i++) {
+					if (!dados[i].temperatura) dados[i].temperatura_normalizada = 0;
+					else dados[i].temperatura_normalizada = 100 * (dados[i].temperatura - menorTemperatura) / delta ;
+				}
 
 				let dias = [];
 				let ultimoDia = null;
@@ -133,14 +138,15 @@
 					html.push(`<tr><td>${h}:00</td>`);
 					for (let d = 0; d < dias.length; d++) {
 						let temperatura = 0;
+						let temperatura_normalizada = 0;
 						for (let i = 0; i < dados.length; i++) {
 							if (dados[i].dia === dias[d] && dados[i].hora === h) {
 								temperatura = dados[i].temperatura;
+								temperatura_normalizada = dados[i].temperatura_normalizada;
 								break;
 							}
 						}
-						const opacity = (temperatura - 20) / 3;
-						html.push(`<td style="background-color:rgba(113, 74, 152, ${opacity});">${temperatura.toFixed(1)}</td>`);
+						html.push(`<td style="background-color:rgba(113, 74, 152, ${temperatura_normalizada / 100});">${temperatura.toFixed(1)}</td>`);
 					}
 					html.push(`</tr>`);
 				}

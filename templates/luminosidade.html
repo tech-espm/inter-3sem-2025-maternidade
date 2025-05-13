@@ -4,6 +4,7 @@
 
 <section class="hero">
 	<h1>Monitoramento de Luminosidade</h1>
+	<button type="submit" class="graficosbotão">Visualizar Gráficos</button>
 </section>
 
 <div class="container-fluid">
@@ -98,8 +99,16 @@
 				let menorLuminosidade = Infinity;
 				let maiorLuminosidade = -Infinity;
 				for (let i = 0; i < dados.length; i++) {
+					// Para que o 0.0 não atrapalhe
+					if (!dados[i].luminosidade) continue;
 					if (menorLuminosidade > dados[i].luminosidade) menorLuminosidade = dados[i].luminosidade;
 					if (maiorLuminosidade < dados[i].luminosidade) maiorLuminosidade = dados[i].luminosidade;
+				}
+
+				let delta = maiorLuminosidade - menorLuminosidade;
+				for (let i = 0; i < dados.length; i++) {
+					if (!dados[i].luminosidade) dados[i].luminosidade_normalizada = 0;
+					else dados[i].luminosidade_normalizada = 100 * (dados[i].luminosidade - menorLuminosidade) / delta ;
 				}
 
 				let dias = [];
@@ -121,15 +130,16 @@
 					html.push(`<tr><td>${h}:00</td>`);
 					for (let d = 0; d < dias.length; d++) {
 						let luminosidade = 0;
+						let luminosidade_normalizada = 0;
 						for (let i = 0; i < dados.length; i++) {
 							if (dados[i].dia === dias[d] && dados[i].hora === h) {
 								luminosidade = dados[i].luminosidade;
+								luminosidade_normalizada = dados[i].luminosidade_normalizada;
 								break;
 							}
 						}
 						
-						let opacity = (luminosidade - menorLuminosidade) / (maiorLuminosidade - menorLuminosidade);
-						html.push(`<td style="background-color:rgba( 113, 74, 152,${opacity});">${luminosidade.toFixed(1)}</td>`);
+						html.push(`<td style="background-color:rgba( 113, 74, 152,${luminosidade_normalizada/100});">${luminosidade.toFixed(1)}</td>`);
 					}
 					html.push(`</tr>`);
 				}

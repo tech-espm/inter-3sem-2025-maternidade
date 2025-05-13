@@ -162,8 +162,8 @@ body {
 .btn-primary {
     text-decoration-color: #070707;
     background-color: #d7b1de;
-    border-color:#ad5bbc
-    
+    border-color:#ad5bbc;
+    color: #000000;
     
 }
 
@@ -171,6 +171,7 @@ body {
 .btn-primary:focus {
     background-color: #821c73; 
     border-color: #070707;
+    color: #ffffff;
 }
 
 .textotitulo{
@@ -247,4 +248,13 @@ body {
 
 .social-block img:hover {
     transform: rotate(15deg);
+}
+
+.graficosbotão{
+    text-decoration-color: #070707;
+    background-color: #d7b1de;
+    border-color:#ad5bbc;
+    color: #000000;
+    border-radius: 8px; 
+     padding: 12px 24px;
 }

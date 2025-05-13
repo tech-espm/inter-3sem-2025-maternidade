@@ -4,26 +4,24 @@
 
 <section class="hero">
 	<h1>Monitoramento de Umidade</h1>
+	<button type="submit" class="graficosbotão">Visualizar Gráficos</button>
 </section>
 
 <div class="container-fluid">
 
 	<div class="row">
 		<div class="col-sm-4">
-
 			<div class="card shadow my-4">
-				<div class="data">
+				<div class="card-body">
 					<form id="form">
 						<div class="form-group">
 							<label for="data">Data</label>
 							<input id="data" name="data" class="form-control" type="date" value="{{ hoje }}" />
 						</div>
-
 						<button type="submit" class="btn btn-primary">Listar</button>
 					</form>
 				</div>
 			</div>
-
 		</div>
 	</div>
 
@@ -101,8 +99,16 @@
 				let menorUmidade = Infinity;
 				let maiorUmidade = -Infinity;
 				for (let i = 0; i < dados.length; i++) {
+					// Para que o 0.0 não atrapalhe
+					if (!dados[i].umidade) continue;
 					if (menorUmidade > dados[i].umidade) menorUmidade = dados[i].umidade;
 					if (maiorUmidade < dados[i].umidade) maiorUmidade = dados[i].umidade;
+				}
+
+				let delta = maiorUmidade - menorUmidade;
+				for (let i = 0; i < dados.length; i++) {
+					if (!dados[i].umidade) dados[i].umidade_normalizada = 0;
+					else dados[i].umidade_normalizada = 100 * (dados[i].umidade - menorUmidade) / delta ;
 				}
 
 				let dias = [];
@@ -128,24 +134,19 @@
 				for (let h = 0; h <= 23; h++) {
 					html.push(`<tr><td>${h}:00</td>`);
 					for (let d = 0; d < dias.length; d++) {
-						let umidade = null;
+						let umidade = 0;
+						let umidade_normalizada = 0;
 						for (let i = 0; i < dados.length; i++) {
 							if (dados[i].dia === dias[d] && dados[i].hora === h) {
 								umidade = dados[i].umidade;
+								umidade_normalizada = dados[i].umidade_normalizada;
 								break;
 							}
 						}
-
-						if (umidade !== null) {
-							const opacity = Math.min(Math.max((umidade - 75) / 13, 0), 1); // entre 0 e 1
-							html.push(`<td style="background-color:rgba(113, 74, 152, ${opacity});">${umidade.toFixed(1)}</td>`);
-						} else {
-							html.push("<td>-</td>");
-						}
+						html.push(`<td style="background-color:rgba(113, 74, 152, ${umidade_normalizada/100});">${umidade.toFixed(1)}</td>`);
 					}
 					html.push(`</tr>`);
 				}
-
 				html.push(`</tbody></table>`);
 				document.getElementById("div-grafico").innerHTML = html.join('');
 

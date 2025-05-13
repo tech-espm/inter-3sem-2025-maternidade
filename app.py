@@ -13,10 +13,6 @@ def index():
     hoje = datetime.today().strftime('%Y-%m-%d')
     return render_template('index/index.html', hoje=hoje)
 
-@app.get('/index-antiga')
-def index_antiga():
-    hoje = datetime.today().strftime('%Y-%m-%d')
-    return render_template('index/index-antiga.html', hoje=hoje)
 
 
 @app.get('/sobre')
