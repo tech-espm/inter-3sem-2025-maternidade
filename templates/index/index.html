@@ -31,28 +31,46 @@
 		<h2 class="textotitulo">Dados Disponíveis</h2>
 		<div class="social-links-container d-flex flex-wrap justify-content-center">
 			<div class="social-block text-center mx-3">
-				<a href="http://localhost:3000/luminosidade" >
+				<button type="button" data-id="div-grafico-ruido">
+					<img src="/static/img/ruido.png" alt="Ruído" width="50" class="mb-2">
+					<p>Ruído</p>
+				</button>
+			</div>
+			<div class="social-block text-center mx-3">
+				<button type="button" data-id="div-grafico-luminosidade">
 					<img src="/static/img/luminosidade.png" alt="Luminosidade" width="50" class="mb-2">
 					<p>Luminosidade</p>
-				</a>
+				</button>
 			</div>
 			<div class="social-block text-center mx-3">
-				<a href="http://localhost:3000/temperatura" >
+				<button type="button" data-id="div-grafico-temperatura">
 					<img src="/static/img/temperatura.png" alt="Temperatura" width="50" class="mb-2">
 					<p>Temperatura</p>
-				</a>
+				</button>
 			</div>
 			<div class="social-block text-center mx-3">
-				<a href="http://localhost:3000/umidade">
+				<button type="button" data-id="div-grafico-umidade">
 					<img src="/static/img/umidade.png" alt="Umidade" width="50" class="mb-2">
 					<p>Umidade</p>
-				</a>
+				</button>
 			</div>
 		</div>
 	</section>
 
-	<div class="card shadow my-4">
-		<div class="card-body"id="div-grafico"></div>
+	<div class="card shadow my-4 grafico" id="div-ruido">
+		<div class="card-body"id="div-grafico-ruido"></div>
+	</div>
+
+	<div class="card shadow my-4 grafico" id="div-luminosidade" style="display: none;">
+		<div class="card-body" id="div-grafico-luminosidade"></div>
+	</div>
+
+	<div class="card shadow my-4 grafico" id="div-temperatura" style="display: none;">
+		<div class="card-body" id="div-grafico-temperatura"></div>
+	</div>
+
+	<div class="card shadow my-4 grafico" id="div-umidade" style="display: none;">
+		<div class="card-body" id="div-grafico-umidade"></div>
 	</div>
 
 </div>
@@ -66,6 +84,22 @@
 <script type="text/javascript">
 	"use strict";
 
+	// Add this at the beginning of the script
+	document.querySelectorAll('.social-links-container button').forEach(button => {
+		button.addEventListener('click', function() {
+			const targetId = this.getAttribute('data-id');
+			const targetDiv = document.getElementById(targetId).parentElement;
+			
+			// Hide all graph divs first
+			document.querySelectorAll('.grafico').forEach(div => {
+				div.style.display = 'none';
+			});
+			
+			// Show the selected graph div
+			targetDiv.style.display = 'block';
+		});
+	});
+
 	$("#form").validate({
 		rules: {
 			data: {
@@ -77,6 +111,261 @@
 		}
 	});
 
+    function relativeLuminance(rgb) {
+        if ((typeof rgb) === "string")
+            rgb = parseInt(rgb.replace("#", ""), 16);
+        rgb |= 0;
+        if (rgb < 0)
+            return 1;
+        var RsRGB = ((rgb >>> 16) & 0xff) / 255.0,
+            GsRGB = ((rgb >>> 8) & 0xff) / 255.0,
+            BsRGB = (rgb & 0xff) / 255.0,
+            R, G, B;
+        if (RsRGB <= 0.03928) R = RsRGB / 12.92; else R = Math.pow((RsRGB + 0.055) / 1.055, 2.4);
+        if (GsRGB <= 0.03928) G = GsRGB / 12.92; else G = Math.pow((GsRGB + 0.055) / 1.055, 2.4);
+        if (BsRGB <= 0.03928) B = BsRGB / 12.92; else B = Math.pow((BsRGB + 0.055) / 1.055, 2.4);
+        return (0.2126 * R) + (0.7152 * G) + (0.0722 * B);
+    }
+
+    function textColorForBackground(i) {
+        return (relativeLuminance(i) < 0.4) ? "#ffffff" : "#000000";
+    }
+
+    function coresHeatmap(perc) {
+        const r0 = 0xff;
+        const g0 = 0xff;
+        const b0 = 0xff;
+        const r1 = 0x71;
+        const g1 = 0x4a;
+        const b1 = 0x98;
+        let r = Math.max(0, Math.min(255, ((perc * r1) + ((1 - perc) * r0)) | 0)).toString(16);
+        let g = Math.max(0, Math.min(255, ((perc * g1) + ((1 - perc) * g0)) | 0)).toString(16);
+        let b = Math.max(0, Math.min(255, ((perc * b1) + ((1 - perc) * b0)) | 0)).toString(16);
+        if (r.length < 2) r = "0" + r;
+        if (g.length < 2) g = "0" + g;
+        if (b.length < 2) b = "0" + b;
+        const corFundo = "#" + r + g + b;
+        const corTexto = textColorForBackground(corFundo);
+        return `background-color: ${corFundo}; color: ${corTexto};`;
+    }
+
+	function gerarHeatmapRuido(dados) {
+		let menorRuido = Infinity;
+		let maiorRuido = -Infinity;
+		for (let i = 0; i < dados.length; i++) {
+			if (menorRuido > dados[i].ruido)
+				menorRuido = dados[i].ruido;
+			if (maiorRuido < dados[i].ruido)
+				maiorRuido = dados[i].ruido;
+		}
+
+		let delta = maiorRuido - menorRuido;
+		for (let i = 0; i < dados.length; i++) {
+			dados[i].ruido_normalizado = 100 * (dados[i].ruido - menorRuido) / delta ;
+		}
+
+		let dias = [];
+		let ultimoDia = null;
+		for (let i = 0; i < dados.length; i++) {
+			if (ultimoDia !== dados[i].dia) {
+				ultimoDia = dados[i].dia;
+				dias.push(ultimoDia);
+			}
+		}
+
+		//TABELA
+		let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
+		for (let d = 0; d < dias.length; d++) {
+			html.push(`<th>${dias[d]}</th>`);
+		}
+		html.push(`
+			</tr>
+			</thead>
+			<tbody>
+		`);
+
+		for (let h = 0; h <= 23; h++) {
+			html.push(`<tr><td>${h}:00</td>`);
+				for (let d = 0; d < dias.length; d++) {
+				let ruido = 0;
+				for (let i = 0; i < dados.length; i++) {
+					if (dados[i].dia === dias[d] && dados[i].hora === h) {
+						ruido = dados[i].ruido_normalizado;
+						break;
+					}
+				}
+				html.push(`<td style="background-color:rgba(113, 74, 152, ${ruido / 100});">${ruido.toFixed(1)}</td>`);
+			}
+			html.push(`</tr>`);
+		}
+		html.push(`</tbody></table>`);
+		document.getElementById("div-grafico-ruido").innerHTML = html.join('');
+	}
+
+	function gerarHeatmapLuminosidade(dados) {
+		let menorLuminosidade = Infinity;
+		let maiorLuminosidade = -Infinity;
+		for (let i = 0; i < dados.length; i++) {
+			// Para que o 0.0 não atrapalhe
+			if (!dados[i].luminosidade) continue;
+			if (menorLuminosidade > dados[i].luminosidade) menorLuminosidade = dados[i].luminosidade;
+			if (maiorLuminosidade < dados[i].luminosidade) maiorLuminosidade = dados[i].luminosidade;
+		}
+
+		let delta = maiorLuminosidade - menorLuminosidade;
+		for (let i = 0; i < dados.length; i++) {
+			if (!dados[i].luminosidade) dados[i].luminosidade_normalizada = 0;
+			else dados[i].luminosidade_normalizada = 100 * (dados[i].luminosidade - menorLuminosidade) / delta ;
+		}
+
+		let dias = [];
+		let ultimoDia = null;
+		for (let i = 0; i < dados.length; i++) {
+			if (ultimoDia !== dados[i].dia) {
+				ultimoDia = dados[i].dia;
+				dias.push(ultimoDia);
+			}
+		}
+
+		let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
+		for (let d = 0; d < dias.length; d++) {
+			html.push(`<th>${dias[d]}</th>`);
+		}
+		html.push(`</tr></thead><tbody>`);
+
+		for (let h = 0; h <= 23; h++) {
+			html.push(`<tr><td>${h}:00</td>`);
+			for (let d = 0; d < dias.length; d++) {
+				let luminosidade = 0;
+				let luminosidade_normalizada = 0;
+				for (let i = 0; i < dados.length; i++) {
+					if (dados[i].dia === dias[d] && dados[i].hora === h) {
+						luminosidade = dados[i].luminosidade;
+						luminosidade_normalizada = dados[i].luminosidade_normalizada;
+						break;
+					}
+				}
+				
+				html.push(`<td style="background-color:rgba( 113, 74, 152,${luminosidade_normalizada/100});">${luminosidade.toFixed(1)}</td>`);
+			}
+			html.push(`</tr>`);
+		}
+		html.push(`</tbody></table>`);
+		document.getElementById("div-grafico-luminosidade").innerHTML = html.join('');
+	}
+
+	function gerarHeatmapTemperatura(dados) {
+		let menorTemperatura = Infinity;
+		let maiorTemperatura = -Infinity;
+		for (let i = 0; i < dados.length; i++) {
+			// Para que o 0.0 não atrapalhe
+			if (!dados[i].temperatura) continue;
+			if (menorTemperatura > dados[i].temperatura) menorTemperatura = dados[i].temperatura;
+			if (maiorTemperatura < dados[i].temperatura) maiorTemperatura = dados[i].temperatura;
+		}
+
+		let delta = maiorTemperatura - menorTemperatura;
+		for (let i = 0; i < dados.length; i++) {
+			if (!dados[i].temperatura) dados[i].temperatura_normalizada = 0;
+			else dados[i].temperatura_normalizada = 100 * (dados[i].temperatura - menorTemperatura) / delta ;
+		}
+
+		let dias = [];
+		let ultimoDia = null;
+		for (let i = 0; i < dados.length; i++) {
+			if (ultimoDia !== dados[i].dia) {
+				ultimoDia = dados[i].dia;
+				dias.push(ultimoDia);
+			}
+		}
+		
+		//formatação da tabela
+		let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
+		for (let d = 0; d < dias.length; d++) {
+			html.push(`<th>${dias[d]}</th>`);
+		}
+		html.push(`
+			</tr>
+			</thead>
+			<tbody>
+		`);
+
+		for (let h = 0; h <= 23; h++) {
+			html.push(`<tr><td>${h}:00</td>`);
+			for (let d = 0; d < dias.length; d++) {
+				let temperatura = 0;
+				let temperatura_normalizada = 0;
+				for (let i = 0; i < dados.length; i++) {
+					if (dados[i].dia === dias[d] && dados[i].hora === h) {
+						temperatura = dados[i].temperatura;
+						temperatura_normalizada = dados[i].temperatura_normalizada;
+						break;
+					}
+				}
+				html.push(`<td style="background-color:rgba(113, 74, 152, ${temperatura_normalizada / 100});">${temperatura.toFixed(1)}</td>`);
+			}
+			html.push(`</tr>`);
+		}
+		html.push(`</tbody></table>`);
+		document.getElementById("div-grafico-temperatura").innerHTML = html.join('');
+	}
+
+	function gerarHeatmapUmidade(dados) {
+		let menorUmidade = Infinity;
+		let maiorUmidade = -Infinity;
+		for (let i = 0; i < dados.length; i++) {
+			// Para que o 0.0 não atrapalhe
+			if (!dados[i].umidade) continue;
+			if (menorUmidade > dados[i].umidade) menorUmidade = dados[i].umidade;
+			if (maiorUmidade < dados[i].umidade) maiorUmidade = dados[i].umidade;
+		}
+
+		let delta = maiorUmidade - menorUmidade;
+		for (let i = 0; i < dados.length; i++) {
+			if (!dados[i].umidade) dados[i].umidade_normalizada = 0;
+			else dados[i].umidade_normalizada = 100 * (dados[i].umidade - menorUmidade) / delta ;
+		}
+
+		let dias = [];
+		let ultimoDia = null;
+		for (let i = 0; i < dados.length; i++) {
+			if (ultimoDia !== dados[i].dia) {
+				ultimoDia = dados[i].dia;
+				dias.push(ultimoDia);
+			}
+		}
+		
+		//formatação da tabela
+		let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
+		for (let d = 0; d < dias.length; d++) {
+			html.push(`<th>${dias[d]}</th>`);
+		}
+		html.push(`
+			</tr>
+			</thead>
+			<tbody>
+		`);
+
+		for (let h = 0; h <= 23; h++) {
+			html.push(`<tr><td>${h}:00</td>`);
+			for (let d = 0; d < dias.length; d++) {
+				let umidade = 0;
+				let umidade_normalizada = 0;
+				for (let i = 0; i < dados.length; i++) {
+					if (dados[i].dia === dias[d] && dados[i].hora === h) {
+						umidade = dados[i].umidade;
+						umidade_normalizada = dados[i].umidade_normalizada;
+						break;
+					}
+				}
+				html.push(`<td style="background-color:rgba(113, 74, 152, ${umidade_normalizada/100});">${umidade.toFixed(1)}</td>`);
+			}
+			html.push(`</tr>`);
+		}
+		html.push(`</tbody></table>`);
+		document.getElementById("div-grafico-umidade").innerHTML = html.join('');
+	}
+
 	async function atualizarDados() {
 		Swal.fire({
 			title: 'Carregando...',
@@ -85,7 +374,6 @@
 		});
 
 		try {
-
 			let dataFinal = document.getElementById("data").value;
 			let dataInicial = (new Date((new Date(dataFinal)).getTime() - (6 * 24 * 60 * 60 * 1000))).toISOString().substring(0, 10)
 			let response = await fetch("/obterDados?dataInicial=" + encodeURIComponent(dataInicial) + "&dataFinal=" + encodeURIComponent(dataFinal));
@@ -100,57 +388,10 @@
 					return;
 				}
 
-				let menorRuido = Infinity;
-				let maiorRuido = -Infinity;
-				for (let i = 0; i < dados.length; i++) {
-					if (menorRuido > dados[i].ruido)
-						menorRuido = dados[i].ruido;
-					if (maiorRuido < dados[i].ruido)
-						maiorRuido = dados[i].ruido;
-				}
-
-				let delta = maiorRuido - menorRuido;
-				for (let i = 0; i < dados.length; i++) {
-					dados[i].ruido_normalizado = 100 * (dados[i].ruido - menorRuido) / delta ;
-				}
-
-				let dias = [];
-				let ultimoDia = null;
-				for (let i = 0; i < dados.length; i++) {
-					if (ultimoDia !== dados[i].dia) {
-						ultimoDia = dados[i].dia;
-						dias.push(ultimoDia);
-					}
-				}
-
-				//TABELA
-				let html = [`<table class="table table-bordered"><thead><tr><th>Hora</th>`];
-				for (let d = 0; d < dias.length; d++) {
-					html.push(`<th>${dias[d]}</th>`);
-				}
-				html.push(`
-					</tr>
-					</thead>
-					<tbody>
-				`);
-
-				for (let h = 0; h <= 23; h++) {
-					html.push(`<tr><td>${h}:00</td>`);
-						for (let d = 0; d < dias.length; d++) {
-						let ruido = 0;
-						for (let i = 0; i < dados.length; i++) {
-							if (dados[i].dia === dias[d] && dados[i].hora === h) {
-								ruido = dados[i].ruido_normalizado;
-								break;
-							}
-						}
-						html.push(`<td style="background-color:rgba(113, 74, 152, ${ruido / 100});">${ruido.toFixed(1)}</td>`);
-					}
-					html.push(`</tr>`);
-				}
-				html.push(`</tbody></table>`);
-				document.getElementById("div-grafico").innerHTML = html.join('');
-
+				gerarHeatmapRuido(dados);
+				gerarHeatmapLuminosidade(dados);
+				gerarHeatmapTemperatura(dados);
+				gerarHeatmapUmidade(dados);
 			} else {
 				const erro = await response.text();
 				Swal.fire("Erro", erro, "error");

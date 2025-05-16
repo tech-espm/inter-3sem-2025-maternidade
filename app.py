@@ -19,21 +19,6 @@ def index():
 def sobre():
     return render_template('index/sobre.html', titulo='Sobre Nós')
 
-@app.get('/temperatura')
-def temperatura():
-    hoje = datetime.today().strftime('%Y-%m-%d')
-    return render_template('temperatura.html', hoje=hoje)
-
-@app.get('/luminosidade')
-def luminosidade():
-    hoje = datetime.today().strftime('%Y-%m-%d')
-    return render_template('luminosidade.html', hoje=hoje)
-    
-@app.get('/umidade')
-def umidade():
-    hoje = datetime.today().strftime('%Y-%m-%d')
-    return render_template('umidade.html', hoje=hoje)
-
 
 @app.get('/obterDados')
 def obterDados():
