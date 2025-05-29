@@ -9,11 +9,11 @@
 ### 2025-01
 
 ## Integrantes
-- [Nome](https://github.com/xxx)
-- [Nome](https://github.com/xxx)
-- [Nome](https://github.com/xxx)
-- [Nome](https://github.com/xxx)
-- [Nome](https://github.com/xxx)
+- [Maria Luiza Oliveira de Souza](https://github.com/xxx)
+- [Marcela](https://github.com/xxx)
+- [Ana](https://github.com/xxx)
+- [Rafael](https://github.com/xxx)
+
 
 ## Descrição do Projeto
 

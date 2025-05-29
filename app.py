@@ -19,6 +19,15 @@ def index():
 def sobre():
     return render_template('index/sobre.html', titulo='Sobre Nós')
 
+@app.get('/analise')
+def analise():
+    return render_template('analise.html', titulo='Análise Gráfica')
+
+@app.get('/LandingPage')
+def LandingPage():
+    return render_template('index/Landing.html', titulo='Landing Page')
+
+
 
 @app.get('/obterDados')
 def obterDados():
@@ -48,8 +57,6 @@ def criar():
     print(dados['nome'])
     return Response(status=204)
 
-if __name__ == '__main__':
-    app.run(host=config.host, port=config.port)
 
 
 @app.get('/obterTemperaturaAgrupada')
@@ -85,3 +92,7 @@ def obterLuminosidadeAgrupada():
 
     dados = banco.listarLuminosidadeAgrupada(dataInicial, dataFinal)  
     return json.jsonify(dados)
+
+
+if __name__ == '__main__':
+    app.run(host=config.host, port=config.port)
