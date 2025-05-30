@@ -23,11 +23,11 @@ def sobre():
 def analise():
     return render_template('analise.html', titulo='Análise Gráfica')
 
-@app.get('/LandingPage')
-def LandingPage():
-    return render_template('index/Landing.html', titulo='Landing Page')
+@app.get('/landing')
+def Landing_page():
+    return render_template('index/landing.html', titulo='Landing Page')
 
-
+    
 
 @app.get('/obterDados')
 def obterDados():
