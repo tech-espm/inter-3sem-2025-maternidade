@@ -28,6 +28,14 @@ def Landing_page():
     return render_template('index/landing.html', titulo='Landing Page')
 
     
+@app.get('/vermelho')
+def vermelho():
+    return render_template('index/vermelho.html', titulo='vermelho')
+
+@app.get('/azul')
+def azul():
+    return render_template('index/azul.html', titulo='vermelho')
+
 
 @app.get('/obterDados')
 def obterDados():
