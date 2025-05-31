@@ -28,13 +28,13 @@ def Landing_page():
     return render_template('index/landing.html', titulo='Landing Page')
 
     
-@app.get('/vermelho')
+@app.get('/statusruim')
 def vermelho():
-    return render_template('index/vermelho.html', titulo='vermelho')
+    return render_template('index/statusruim.html', titulo='vermelho')
 
-@app.get('/azul')
+@app.get('/statusbom')
 def azul():
-    return render_template('index/azul.html', titulo='vermelho')
+    return render_template('index/statusbom.html', titulo='vermelho')
 
 
 @app.get('/obterDados')
