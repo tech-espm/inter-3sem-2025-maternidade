@@ -104,7 +104,7 @@
 	.container {
 		display: flex;
 		justify-content: space-around; /* ou 'center' */
-		align-items: center;
+		align-items: left;
 		flex-wrap: wrap;
 		width: 90%;
 		z-index: 2;
@@ -112,13 +112,13 @@
 
 
     .text-content {
-      max-width: 200px;
+      max-width: 500px;
       z-index: 2;
     }
 
     .text-content h1,
     .text-content h2 {
-      font-size: 50px;
+      font-size: 80px;
       color: #8f52d9;
       font-weight: bold;
     }
@@ -127,7 +127,7 @@
       color: #5a29a8;
       font-weight: bold;
       margin: 20px 0;
-      font-size: 1px;
+      font-size: 18px;
     }
 
     .buttons {
@@ -242,10 +242,11 @@
     }
 
 
-	.estrelas{
-	width: 100px; /* Largura */
-	height: auto; /* Mantém a proporção */
-	}
+.estrelas {
+  width: 40px;
+  height: auto;
+}
+
 
 </style>
 </head>
@@ -263,15 +264,20 @@
       </nav>
     </header>
 
-    <div class="container">
-      <div class="text-content">
-        <h1>Baby</h1>
-        <h2>Sense</h2><img src="/static/img/estrelas.png" alt = "estrelas" class ="estrelas">
-        <p>Monitoramento Inteligente para<br>Cuidar de Quem Mais Precisa</p>
-        <div class="buttons">
-          <button><a href="/analise">analise</a></a></button>
-        </div>
-      </div>
+<div class="container">
+  <div class="text-content">
+    <h1>Baby</h1>
+    <div class="sense-line">
+      <h2>Sense</h2>
+      <img src="estrelas.png" alt="estrelas" class="estrelas">
+    </div>
+    <p>Monitoramento Inteligente para<br>Cuidar de Quem Mais Precisa</p>
+    <div class="buttons">
+      <button>Acessar dados (pag do cleber)</button>
+    </div>
+  </div>
+</div>
+
 
       <div class="imagem">
         <img src="/static/img/logocerta.png" alt="logo">
