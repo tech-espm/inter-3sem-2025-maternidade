@@ -9,6 +9,7 @@ html, body {
 
 body {
 	font-family: Montserrat, sans-serif;
+    background-color: #e2f2fb;
 }
 
 .limitador {
@@ -37,9 +38,7 @@ body {
 	text-decoration: none;
 }
 
-.bg-light {
-	background-color: #d9c1c7;
-}
+
 
 .hero {
     position: relative;
@@ -151,10 +150,11 @@ body {
 
 .navbar img {
 	height: 40px;
+    
 }
 .navbar .nav-link {
 	margin-left: 10px;
-
+    color:#000000;
 }
 
 
@@ -178,7 +178,7 @@ body {
     font-family:  Montserrat, sans-serif;
     font-size: 2.5rem;
     font-weight: 600;
-    color: #571288;
+    color: #4b1d84;
     text-align: center;
     margin: 1rem 0;
     padding-bottom: 0.5rem;
@@ -263,4 +263,6 @@ body {
      padding: 12px 24px;
 }
 
-
+.cor-nav{
+    background-color: #e2f2fb;
+}

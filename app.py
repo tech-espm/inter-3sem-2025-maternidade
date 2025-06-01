@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.get('/')
 def index():
     hoje = datetime.today().strftime('%Y-%m-%d')
-    return render_template('index/index.html', hoje=hoje)
+    return render_template('index/monitoramento.html', hoje=hoje)
 
 
 

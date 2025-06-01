@@ -60,12 +60,13 @@
 
     .circle {
       position: absolute;
+      box-shadow: 8px 10px 15px rgba(0, 0, 0, 0.4); /* sombra realista */
       top: 200px;
       left: 0;
       width: 115%;
       height: 108%;
       background-color: #dcfcfe;
-      clip-path: circle(53.8% at 90% 75%);
+      clip-path: circle(55.8% at 90% 75%);
       z-index: 0;
     }
 
@@ -118,6 +119,11 @@
 
     .titulo-baby {
       font-size: 70px;
+      text-shadow:
+      1px 1px 0 #a373d1,
+      2px 2px 2px #8145bd,
+      3px 3px 4px rgba(0, 0, 0, 0.2),
+      4px 4px 6px rgba(0, 0, 0, 0.1);
       color: #A771F1;
       font-weight: 900;
       text-align: center;
@@ -127,6 +133,10 @@
 
     .titulo-sense {
       font-size: 100px;
+      text-shadow:
+    2px 2px 0 #4b1d84,
+    4px 4px 2px #3a1466,
+    6px 6px 6px rgba(0, 0, 0, 0.3); 
       color: #7C41CA;
       font-weight: 900;
       text-align: center;
@@ -153,10 +163,12 @@
       gap: 20px;
       justify-content: center;
       transform: translateX(-30px)
+      
     }
 
     .buttons button {
       background-color: #A771F1;
+      box-shadow: 6px 7px 12px rgba(0, 0, 0, 0.2);
       color: white;
       border: none;
       padding: 20px 40px;
@@ -248,6 +260,7 @@
     .cloud-text img {
       width: 100%;
       height: auto;
+       filter: drop-shadow(25px 20px 7px rgba(0, 0, 0, 0.2))
     }
 
     .text-over-cloud {
@@ -255,13 +268,14 @@
       text-align: center;
       color: #4e2d84;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 35px;
       padding: 10px;
     }
 
     .estrelas {
       width: 80px;
       height: auto;
+      filter: drop-shadow(15px 5px 5px rgba(0, 0, 0, 0.2))
     }
 
  </style>
@@ -274,8 +288,10 @@
       <img class="logo" src="/static/img/logocerta.png" alt="Logo">
       <nav class="navegation">
         <ul>
-          <li><a href="#">Monitoramento</a></li>
-          <li><a href="#">Sobre nós</a></li>
+          <li><a href="/">Monitoramento</a></li>
+          <li><a href="/sobre">Sobre </a></li>
+          <li><a href="/analise">Insights</a></li>
+          <li><a href="/statusbom">Status</a></li>
         </ul>
       </nav>
     </header>
@@ -289,7 +305,8 @@
         </h2>
         <p>Monitoramento Inteligente para<br>cuidar de quem mais precisa</p>
         <div class="buttons">
-          <button>Insights</button>
+          <button onclick="window.location.href='/analise'">Insights</button>
+
         </div>
       </div>
 
