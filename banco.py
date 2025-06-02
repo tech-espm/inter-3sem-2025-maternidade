@@ -21,9 +21,6 @@ from config import conexao_banco
 # mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>
 engine = create_engine(conexao_banco)
 
-# A função text(), utilizada ao longo desse código, serve para encapsular um comando
-# SQL qualquer, de modo que o SQLAlchemy possa entender!
-
 
 
 

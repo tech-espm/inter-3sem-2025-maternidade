@@ -34,7 +34,7 @@ def vermelho():
 
 @app.get('/statusbom')
 def azul():
-    return render_template('index/statusbom.html', titulo='vermelho')
+    return render_template('index/statusbom.html', titulo='azul')
 
 
 @app.get('/obterDados')
@@ -60,15 +60,13 @@ def obterDados():
 
 
 
-
-
 @app.get('/obterTemperaturaAgrupada')
 def obterTemperaturaAgrupada():
 	dataInicial = request.args.get("dataInicial")
 	dataFinal = request.args.get("dataFinal")
 
 	if not dataInicial or not dataFinal:
-		return json.jsonify({"erro": "Parâmetros inválidos"}), 400
+		return json.jsonify(({"erro": "Parâmetros inválidos"}), 400)
 
 	dados = banco.listarTemperaturaAgrupada(dataInicial, dataFinal)
 	return json.jsonify(dados)
@@ -79,7 +77,7 @@ def obterUmidadeAgrupada():
     dataFinal = request.args.get("dataFinal")
     
     if not dataInicial or not dataFinal:
-        return json.jsonify({"erro": "Parâmetros inválidos"}), 400
+        return json.jsonify(({"erro": "Parâmetros inválidos"}), 400)
 
     dados = banco.listarUmidadeAgrupada(dataInicial, dataFinal)  
     return json.jsonify(dados)
@@ -91,7 +89,7 @@ def obterLuminosidadeAgrupada():
     dataFinal = request.args.get("dataFinal")
     
     if not dataInicial or not dataFinal:
-        return json.jsonify({"erro": "Parâmetros inválidos"}), 400
+        return json.jsonify(({"erro": "Parâmetros inválidos"}), 400)
 
     dados = banco.listarLuminosidadeAgrupada(dataInicial, dataFinal)  
     return json.jsonify(dados)
