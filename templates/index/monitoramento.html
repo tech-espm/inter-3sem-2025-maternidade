@@ -194,7 +194,7 @@
 						break;
 					}
 				}
-				html.push(`<td style="background-color:rgba(113, 74, 152, ${ruido / 100});">${ruido.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(ruido / 100)}">${ruido.toFixed(1)}</td>`);
 			}
 			html.push(`</tr>`);
 		}
@@ -246,7 +246,7 @@
 					}
 				}
 				
-				html.push(`<td style="background-color:rgba( 113, 74, 152,${luminosidade_normalizada/100});">${luminosidade.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(luminosidade_normalizada/100)}">${luminosidade.toFixed(1)}</td>`);
 			}
 			html.push(`</tr>`);
 		}
@@ -302,7 +302,7 @@
 						break;
 					}
 				}
-				html.push(`<td style="background-color:rgba(113, 74, 152, ${temperatura_normalizada / 100});">${temperatura.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(temperatura_normalizada / 100)}">${temperatura.toFixed(1)}</td>`);
 			}
 			html.push(`</tr>`);
 		}
@@ -358,7 +358,7 @@
 						break;
 					}
 				}
-				html.push(`<td style="background-color:rgba(113, 74, 152, ${umidade_normalizada/100});">${umidade.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(umidade_normalizada/100)}">${umidade.toFixed(1)}</td>`);
 			}
 			html.push(`</tr>`);
 		}

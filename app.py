@@ -27,14 +27,9 @@ def analise():
 def Landing_page():
     return render_template('index/landing.html', titulo='Landing Page')
 
-    
-@app.get('/statusruim')
-def vermelho():
-    return render_template('index/statusruim.html', titulo='vermelho')
-
-@app.get('/statusbom')
+@app.get('/status')
 def azul():
-    return render_template('index/statusbom.html', titulo='azul')
+    return render_template('index/status.html', titulo='Status')
 
 
 @app.get('/obterDados')

@@ -45,7 +45,7 @@ def listarDados(dataInicial, dataFinal):
 	}
 
 	with Session(engine) as sessao:
-		registros = sessao.execute(text("select date_format(date(data), '%d/%m/%Y') dia, extract(hour from data) hora, max(ruido) ruido, avg(luminosidade) luminosidade, avg(umidade) umidade, avg(temperatura) temperatura from creative where data between :dataInicial and :dataFinal group by dia, hora"), parametros)
+		registros = sessao.execute(text("select date_format(date(data), '%d/%m') dia, extract(hour from data) hora, max(ruido) ruido, avg(luminosidade) luminosidade, avg(umidade) umidade, avg(temperatura) temperatura from creative where data between :dataInicial and :dataFinal group by dia, hora"), parametros)
 		dados = []
 		for registro in registros:
 			dados.append({
