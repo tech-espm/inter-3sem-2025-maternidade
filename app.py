@@ -58,12 +58,7 @@ def obterDados():
 
 
 
-@app.post('/criar')
-def criar():
-    dados = request.json
-    print(dados['id'])
-    print(dados['nome'])
-    return Response(status=204)
+
 
 
 

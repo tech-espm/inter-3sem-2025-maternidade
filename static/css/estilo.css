@@ -266,3 +266,7 @@ body {
 .cor-nav{
     background-color: #e2f2fb;
 }
+
+.sombrastatus{
+    filter: drop-shadow(25px 20px 7px rgba(0, 0, 0, 0.2))
+}
