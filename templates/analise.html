@@ -1,12 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
 <section class="hero">
 	<h1>Análise Gráfica</h1>
 
+	<iframe src="{{ url_for('static', filename='relatorios/relatorio.html') }}"
+	        width="90%" height="800px" style="border:none;"></iframe>
 </section>
-
 {% endblock %}
-
-	
