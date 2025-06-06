@@ -10,9 +10,9 @@
 
 ## Integrantes
 - [Maria Luiza Oliveira de Souza](https://github.com/MariaLuizazz)
-- [Marcela](https://github.com/marcelademartini)
-- [Ana](https://github.com/bligui)
-- [Rafael](https://github.com/rafaarklu)
+- [Marcela de Martini](https://github.com/marcelademartini)
+- [Ana Carolina Frank](https://github.com/bligui)
+- [Rafael Lucena](https://github.com/rafaarklu)
 
 
 ## Descrição do Projeto
