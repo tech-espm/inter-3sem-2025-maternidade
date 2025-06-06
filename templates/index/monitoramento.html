@@ -1,17 +1,24 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+<style type="text/css">
+	.table td, .table th {
+		font-size: 10px;
+		padding: 5px;
+	}
+</style>
+{% endblock %}
+
 {% block body %}
 
 <section class="hero">
-	<h1>Monitoramento de Ruido</h1>
-    <button type="submit" class="graficosbotão">Visualizar Gráficos</button>
-
+	<h1>Monitoramento em Tempo Real</h1>
 </section>
 
 <div class="container-fluid">
 
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-sm-4 offset-sm-4">
 
 			<div class="card shadow my-4">
 				<div class="card-body">
@@ -20,7 +27,9 @@
 							<label for="data">Data</label>
 							<input id="data" name="data" class="form-control" type="date" value="{{ hoje }}" />
 						</div>
-						<button type="submit" class="btn btn-primary">Listar</button>
+						<div class="text-right">
+							<button type="submit" class="btn btn-primary">Listar</button>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -28,49 +37,65 @@
 	</div>
 
 	<section>
-		<h2 class="textotitulo">Dados Disponíveis</h2>
+		<h2 class="textotitulo">Dados Disponíveis (7 Dias)</h2>
 		<div class="social-links-container d-flex flex-wrap justify-content-center">
 			<div class="social-block text-center mx-3">
 				<button type="button" data-id="div-grafico-ruido">
 					<img src="/static/img/ruido.png" alt="Ruído" width="50" class="mb-2">
-					<p>Ruído</p>
+					<p>Ruído<br />(dB)</p>
 				</button>
 			</div>
 			<div class="social-block text-center mx-3">
 				<button type="button" data-id="div-grafico-luminosidade">
 					<img src="/static/img/luminosidade.png" alt="Luminosidade" width="50" class="mb-2">
-					<p>Luminosidade</p>
+					<p>Luminosidade<br />(lux)</p>
 				</button>
 			</div>
 			<div class="social-block text-center mx-3">
 				<button type="button" data-id="div-grafico-temperatura">
 					<img src="/static/img/temperatura.png" alt="Temperatura" width="50" class="mb-2">
-					<p>Temperatura</p>
+					<p>Temperatura<br />(°C)</p>
 				</button>
 			</div>
 			<div class="social-block text-center mx-3">
 				<button type="button" data-id="div-grafico-umidade">
 					<img src="/static/img/umidade.png" alt="Umidade" width="50" class="mb-2">
-					<p>Umidade</p>
+					<p>Umidade<br />(% RH)</p>
 				</button>
 			</div>
 		</div>
 	</section>
 
 	<div class="card shadow my-4 grafico" id="div-ruido">
-		<div class="card-body"id="div-grafico-ruido"></div>
+		<div class="card-body"id="div-grafico-ruido">
+			<div class="text-center">
+				Por favor, aguarde enquanto carregamos os dados...
+			</div>
+		</div>
 	</div>
 
 	<div class="card shadow my-4 grafico" id="div-luminosidade" style="display: none;">
-		<div class="card-body" id="div-grafico-luminosidade"></div>
+		<div class="card-body" id="div-grafico-luminosidade">
+			<div class="text-center">
+				Por favor, aguarde enquanto carregamos os dados...
+			</div>
+		</div>
 	</div>
 
 	<div class="card shadow my-4 grafico" id="div-temperatura" style="display: none;">
-		<div class="card-body" id="div-grafico-temperatura"></div>
+		<div class="card-body" id="div-grafico-temperatura">
+			<div class="text-center">
+				Por favor, aguarde enquanto carregamos os dados...
+			</div>
+		</div>
 	</div>
 
 	<div class="card shadow my-4 grafico" id="div-umidade" style="display: none;">
-		<div class="card-body" id="div-grafico-umidade"></div>
+		<div class="card-body" id="div-grafico-umidade">
+			<div class="text-center">
+				Por favor, aguarde enquanto carregamos os dados...
+			</div>
+		</div>
 	</div>
 
 </div>
@@ -185,7 +210,7 @@
 		`);
 
 		for (let h = 0; h <= 23; h++) {
-			html.push(`<tr><td>${h}:00</td>`);
+			html.push(`<tr><td><b>${h}:00</b></td>`);
 				for (let d = 0; d < dias.length; d++) {
 				let ruido = 0;
 				for (let i = 0; i < dados.length; i++) {
@@ -194,7 +219,7 @@
 						break;
 					}
 				}
-				html.push(`<td style="${coresHeatmap(ruido / 100)}">${ruido.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(ruido / 100)}"><b>${ruido.toFixed(1)}</b></td>`);
 			}
 			html.push(`</tr>`);
 		}
@@ -234,7 +259,7 @@
 		html.push(`</tr></thead><tbody>`);
 
 		for (let h = 0; h <= 23; h++) {
-			html.push(`<tr><td>${h}:00</td>`);
+			html.push(`<tr><td><b>${h}:00</b></td>`);
 			for (let d = 0; d < dias.length; d++) {
 				let luminosidade = 0;
 				let luminosidade_normalizada = 0;
@@ -246,7 +271,7 @@
 					}
 				}
 				
-				html.push(`<td style="${coresHeatmap(luminosidade_normalizada/100)}">${luminosidade.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(luminosidade_normalizada/100)}"><b>${luminosidade.toFixed(1)}</b></td>`);
 			}
 			html.push(`</tr>`);
 		}
@@ -291,7 +316,7 @@
 		`);
 
 		for (let h = 0; h <= 23; h++) {
-			html.push(`<tr><td>${h}:00</td>`);
+			html.push(`<tr><td><b>${h}:00</b></td>`);
 			for (let d = 0; d < dias.length; d++) {
 				let temperatura = 0;
 				let temperatura_normalizada = 0;
@@ -302,7 +327,7 @@
 						break;
 					}
 				}
-				html.push(`<td style="${coresHeatmap(temperatura_normalizada / 100)}">${temperatura.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(temperatura_normalizada / 100)}"><b>${temperatura.toFixed(1)}</b></td>`);
 			}
 			html.push(`</tr>`);
 		}
@@ -347,7 +372,7 @@
 		`);
 
 		for (let h = 0; h <= 23; h++) {
-			html.push(`<tr><td>${h}:00</td>`);
+			html.push(`<tr><td><b>${h}:00</b></td>`);
 			for (let d = 0; d < dias.length; d++) {
 				let umidade = 0;
 				let umidade_normalizada = 0;
@@ -358,7 +383,7 @@
 						break;
 					}
 				}
-				html.push(`<td style="${coresHeatmap(umidade_normalizada/100)}">${umidade.toFixed(1)}</td>`);
+				html.push(`<td style="${coresHeatmap(umidade_normalizada/100)}"><b>${umidade.toFixed(1)}</b></td>`);
 			}
 			html.push(`</tr>`);
 		}

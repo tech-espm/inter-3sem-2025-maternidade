@@ -8,12 +8,10 @@ app = Flask(__name__)
 
 #rotas flask
 
-@app.get('/')
-def index():
+@app.get('/monitoramento')
+def monitoramento():
     hoje = datetime.today().strftime('%Y-%m-%d')
     return render_template('index/monitoramento.html', hoje=hoje)
-
-
 
 @app.get('/sobre')
 def sobre():
@@ -23,8 +21,8 @@ def sobre():
 def analise():
     return render_template('analise.html', titulo='Análise Gráfica')
 
-@app.get('/landing')
-def Landing_page():
+@app.get('/')
+def index():
     return render_template('index/landing.html', titulo='Landing Page')
 
 @app.get('/status')
