@@ -4,20 +4,23 @@
     <a href="https://www.espm.br/cursos-de-graduacao/sistemas-de-informacao/"><img src="https://raw.githubusercontent.com/tech-espm/misc-template/main/logo.png" alt="Sistemas de Informação ESPM" style="width: 375px;"/></a>
 </p>
 
-# Projeto Maternidade
+# BabySense
 
 ### 2025-01
 
 ## Integrantes
-- [Maria Luiza Oliveira de Souza](https://github.com/xxx)
-- [Marcela](https://github.com/xxx)
-- [Ana](https://github.com/xxx)
-- [Rafael](https://github.com/xxx)
+- [Maria Luiza Oliveira de Souza](https://github.com/MariaLuizazz)
+- [Marcela](https://github.com/marcelademartini)
+- [Ana](https://github.com/bligui)
+- [Rafael](https://github.com/rafaarklu)
 
 
 ## Descrição do Projeto
 
-<Descrição>
+O ambiente hospitalar deve proporcionar condições adequadas para a recuperação e bem-estar dos pacientes, especialmente em unidades sensíveis, como as salas de maternidade. Um dos principais desafios nesse contexto é garantir que os recém-nascidos recebam atendimento imediato quando necessitam, especialmente quando choram. O choro do bebê é um dos principais sinais de necessidade, podendo indicar fome, desconforto ou problemas de saúde (SILVA, 2025). Assim, a adoção de tecnologias que auxiliem na detecção automática do choro pode otimizar o atendimento e melhorar a qualidade do cuidado neonatal (SOUZA; ALMEIDA, 2025).
+Neste contexto, o presente projeto propõe a utilização do sensor MULTISENSOR TP V2 IP UP WS para a detecção e monitoramento do choro dos bebês em salas de maternidade. O sistema identificará sons característicos do choro e acionará alertas automáticos para a equipe de enfermagem, permitindo uma resposta rápida e eficaz. O sensor será posicionado estrategicamente no ambiente hospitalar, captando sons de maneira contínua. Caso o choro seja detectado, um alerta será gerado e enviado ao Sistema de Informação em Saúde (SIS) para notificação da equipe responsável, garantindo que os profissionais possam atender prontamente o bebê (COSTA et al., 2025).
+A implementação desse sistema contribuirá para a melhoria do atendimento neonatal, assegurando que os bebês recebam atenção imediata sempre que necessário. Além disso, futuras expansões do projeto poderão permitir a análise de padrões sonoros ao longo do tempo, auxiliando na identificação de comportamentos e necessidades dos recém-nascidos. O sensor também poderá ser integrado a câmeras para verificar a origem do choro e a outros sistemas hospitalares para otimizar a gestão do atendimento (FERREIRA; SANTOS, 2025). A automação proporcionada pelo sistema melhorará a eficiência da equipe médica, reduzindo a necessidade de monitoramento manual e otimizando o tempo dos profissionais (PEREIRA, 2025).
+
 
 ## Configuração do Projeto
 
