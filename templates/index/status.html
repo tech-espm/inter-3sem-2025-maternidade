@@ -66,4 +66,50 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="/static/js/chart.js/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/socket.io/socket.io.min.js"></script>
+
+<script type="text/javascript">
+	"use strict";
+
+	let divStatusBom = document.getElementById("divStatusBom");
+	let divStatusRuim = document.getElementById("divStatusRuim");
+	let socket = null;
+
+	function inicializarSocket() {
+		// Inicializa a conexão com o servidor Socket.IO
+		socket = io();
+
+		// Evento disparado quando a conexão é estabelecida
+		socket.on("connect", () => {
+			console.log("Monitorando notificações...");
+		});
+
+		// Evento disparado quando a conexão é perdida
+		socket.on("disconnect", () => {
+			console.log("Desconectado do servidor");
+		});
+
+		// Evento para receber comandos de mudança de animação
+		socket.on("notificacao", (dados) => {
+			if (dados) {
+				if (dados.status === "bom") {
+					divStatusBom.classList.add("d-flex");
+					divStatusBom.classList.remove("d-none");
+					divStatusRuim.classList.remove("d-flex");
+					divStatusRuim.classList.add("d-none");
+				} else {
+					divStatusRuim.classList.add("d-flex");
+					divStatusRuim.classList.remove("d-none");
+					divStatusBom.classList.remove("d-flex");
+					divStatusBom.classList.add("d-none");
+				}
+			}
+		});
+	}
+
+	inicializarSocket();
+
+</script>
 {% endblock %}

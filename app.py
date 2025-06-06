@@ -3,8 +3,10 @@ import config
 import requests
 import banco
 from datetime import datetime
+import flask_socketio
 
 app = Flask(__name__)
+socketio = flask_socketio.SocketIO(app, cors_allowed_origins="*")
 
 #rotas flask
 
@@ -48,11 +50,6 @@ def obterDados():
 
     return json.jsonify(dados)
 
-
-
-
-
-
 @app.get('/obterTemperaturaAgrupada')
 def obterTemperaturaAgrupada():
 	dataInicial = request.args.get("dataInicial")
@@ -87,6 +84,26 @@ def obterLuminosidadeAgrupada():
     dados = banco.listarLuminosidadeAgrupada(dataInicial, dataFinal)  
     return json.jsonify(dados)
 
+@app.get('/statusbom')
+def statusBom():
+    # Broadcast the notification to all connected clients
+    flask_socketio.emit('notificacao', {"status": "bom"}, namespace='/', broadcast=True)
+    return json.jsonify({"status": "bom"})
+
+@app.get('/statusruim')
+def statusRuim():
+    # Broadcast the notification to all connected clients
+    flask_socketio.emit('notificacao', {"status": "ruim"}, namespace='/', broadcast=True)
+    return json.jsonify({"status": "ruim"})
+
+# Socket.IO event handlers
+@socketio.on('connect')
+def handle_connect():
+    print('Cliente conectado')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Cliente desconectado')
 
 if __name__ == '__main__':
-    app.run(host=config.host, port=config.port)
+    socketio.run(app, host=config.host, port=config.port, debug=True)

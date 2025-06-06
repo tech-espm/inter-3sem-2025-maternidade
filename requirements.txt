@@ -2,3 +2,5 @@ Flask[async]==3.0.3
 requests==2.31.0
 SQLAlchemy==2.0.40
 mysql-connector-python==8.4.0
+python-socketio==5.11.1
+flask-socketio==5.3.6
